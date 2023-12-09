@@ -15,7 +15,8 @@
 
 1. **词法分析**
    - 任务：**将源代码分解成 `token`（标记序列）**
-     - 检测和处理词法中的错误（非法字符）
+     - **检测和处理词法中的错误（非法字符）**
+     - 检测到非法字符在终端输出错误具体信息并返回 `False`
    - 数字（十进制）：整数、小数、负数
    - 运算符：
      - 算术运算符：
@@ -44,8 +45,28 @@
 ```python
 # 用户输入：字符串（空格可有可无）
 str = "sin((1<<2) + 3**4)"
-# 词法分析：生成标记序列
-token = ['sin(','(','1','<<','2',')','+','3','**','4',')']
+```
+
+- **词法分析**：生成元组标记列表
+```python
+# token[0] = {'number','operator','left','right'}
+#              数字     运算符     左括号  右括号
+# left  - function 函数
+#       - 空（普通左括号）
+# right - 空（普通右括号）
+# number - integer 整型
+#        - float 浮点数
+#        - unsigned 非负整数
+# operator - arithmetic 算术运算符
+#          - logical 逻辑运算符
+token = [('left','function','sin('), ('left','','('),
+    ('number','integer','1'), ('operator','logical','<<'),
+    ('number','integer','2'), ('right','',')'),
+    ('operator','arithmetic','+'), ('number','integer','3'),
+    ('operator','arithmetic','**'), ('number','integer','4'),
+    ('right','',')')]
+```
+```python
 # 语法分析：判断是否接受序列
 True or False
 # 语法分析：生成抽象语法树 返回根节点
@@ -71,3 +92,4 @@ class Node:
 ## 参考资料
 
 - 《编译原理（第3版）》第六章：LR 分析
+- [编译原理 简单计算器的编译器的设计与实现（附源码）](https://blog.csdn.net/hhypractise/article/details/107138566)
