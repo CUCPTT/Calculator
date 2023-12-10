@@ -1,10 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
 import pandas as pd
+from lexicalAnalyse import lexer
 
 def calculate():
     current_input = entry.get()
     if current_input:
+        print(lexer(current_input))
         history_text.insert(1.0, current_input + "=\n")
         entry.delete(0, tk.END)
 
@@ -62,7 +64,7 @@ def create_calculator_gui():
         elif button_text == "=":
             # 创建特殊样式的按钮
             button = ttk.Button(window, text=button_text, command=lambda: [calculate(), entry.delete(0, tk.END)], style="Equal.TButton")
-        elif button_text == "Rev":
+        elif button_text == "+/-":
             # 创建切换正负号按钮
             button = ttk.Button(window, text=button_text, command=toggle_sign, style="Custom.TButton")
         else:
