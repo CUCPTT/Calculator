@@ -64,6 +64,6 @@ def lexer(input_string):
     
     return tokens
 
-if __name__ == '__main__':
-    input_str = 'sin((1<<2) + -3**4)'
-    result = lexer(input_str)
+#if __name__ == '__main__':
+#    input_str = 'sin((1<<2) + -3**4)'
+#    result = lexer(input_str)
