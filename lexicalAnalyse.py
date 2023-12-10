@@ -51,7 +51,6 @@ def lexer(input_string):
     # 组合正则表达式模式
     combined_pattern = re.compile('|'.join([number_pattern, operator_pattern, function_pattern, left_paren_pattern, right_paren_pattern, space_pattern]))
     matches = combined_pattern.findall(input_string)
-    print(matches)
 
     for match in matches:
 
@@ -94,13 +93,7 @@ def lexer(input_string):
     print(corrected_tokens)
     return corrected_tokens
 
-# if __name__ == '__main__':
-#     input_str = 'sin((1<<2) + -3.3**4)'
-#     result = lexer(input_str)
+if __name__ == '__main__':
+    input_str = 'sin((1<<2) + -3.3**4)'
+    result = lexer(input_str)
 
-<<<<<<< HEAD
-=======
-#if __name__ == '__main__':
-#    input_str = 'sin((1<<2) + -3**4)'
-#    result = lexer(input_str)
->>>>>>> f73e0a0968554ea45a21509788726f7db48ce167
