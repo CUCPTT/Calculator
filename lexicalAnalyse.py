@@ -98,3 +98,9 @@ def lexer(input_string):
 #     input_str = 'sin((1<<2) + -3.3**4)'
 #     result = lexer(input_str)
 
+<<<<<<< HEAD
+=======
+#if __name__ == '__main__':
+#    input_str = 'sin((1<<2) + -3**4)'
+#    result = lexer(input_str)
+>>>>>>> f73e0a0968554ea45a21509788726f7db48ce167
