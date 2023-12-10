@@ -21,7 +21,7 @@ def lexer(input_string):
         
     # Regular expressions for matching patterns
     number_pattern = r'(\d+(\.\d+)?)'
-    operator_pattern = r'(\*\*|//|<<|>>|[+\-*/%&|^~])'
+    operator_pattern = r'(\*\*|//|<<|>>|[+\-*/%&|^~]|(?<!\d)-)'
     function_pattern = r'(sin\(|cos\(|tan\(|ln\(|sqrt\()'
     left_paren_pattern = r'(\()'
     right_paren_pattern = r'(\))'
@@ -65,5 +65,5 @@ def lexer(input_string):
     return tokens
 
 if __name__ == '__main__':
-    input_str = 'sin((1<<2) + 3**4)'
+    input_str = 'sin((1<<2) + -3**4)'
     result = lexer(input_str)
