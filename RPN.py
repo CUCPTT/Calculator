@@ -54,7 +54,7 @@ def evaluate_postfix(postfix_expr):
             operand1 = stack.pop()
             result = perform_operation1(operand1, operand2, token)
             stack.append(result)
-        elif token.startswith(('sin(', 'cos(', 'ln(', 'sqrt(','~', 'tan(')):
+        elif token.startswith(('sin(', 'cos(', 'ln(', 'sqrt(','tan(')):
             operand = stack.pop()
             result = perform_function(token, operand)
             stack.append(result)
@@ -112,7 +112,7 @@ def RPN(tokens):
     return RPN, result
 
 if __name__ == '__main__':
-    input_str = 'sin(1<<2 + 3**4)'
+    input_str = '~1'
     tokens = lexer(input_str)
 
     postfix_expr = infix_to_postfix(tokens)
