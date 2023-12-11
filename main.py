@@ -7,7 +7,7 @@ def calculate():
     current_input = entry.get()
     if current_input:
         print(lexer(current_input))
-        history_text.insert(1.0, current_input + "=\n")
+        history_list.insert(tk.END, current_input + "=\n")
         entry.delete(0, tk.END)
 
 def toggle_sign():
@@ -21,15 +21,15 @@ def toggle_sign():
 def create_calculator_gui():
     global entry 
     window = tk.Tk()
-    window.title("https://github.com/CUCPTT/Calculator")
+    window.title("github.com/CUCPTT/Calculator")
     window.resizable(False, False)
 
     # 设置窗口图标
     window.iconbitmap("misc/favicon.ico")
 
-    global history_text
-    history_text = tk.Text(window, width=30, height=5, font=("Arial", 16), bg="white", relief="flat")
-    history_text.grid(row=0, column=0, columnspan=6)
+    global history_list
+    history_list = tk.Listbox(window, width=30, height=5, font=("Arial", 16), bg="white", relief="flat")
+    history_list.grid(row=0, column=0, columnspan=6)
 
     entry = tk.Entry(window, width=30, font=("Arial", 16), relief="flat")
     entry.grid(row=1, column=0, columnspan=6)
