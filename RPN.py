@@ -111,15 +111,15 @@ def RPN(tokens):
     result = evaluate_postfix(RPN)
     return RPN, result
 
-if __name__ == '__main__':
-    input_str = '~1'
-    tokens = lexer(input_str)
+# if __name__ == '__main__':
+#     input_str = '~1'
+#     tokens = lexer(input_str)
 
-    postfix_expr = infix_to_postfix(tokens)
-    print(f"Postfix Expression: {postfix_expr}")
+#     postfix_expr = infix_to_postfix(tokens)
+#     print(f"Postfix Expression: {postfix_expr}")
 
-    result = evaluate_postfix(postfix_expr)
-    print(f"Result: {result}")
+#     result = evaluate_postfix(postfix_expr)
+#     print(f"Result: {result}")
 
 # sin(1<<2 + 3**4)
 # sin(3)**2 + cos(3)**2
