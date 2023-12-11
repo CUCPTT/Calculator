@@ -8,9 +8,13 @@ def calculate():
     current_input = entry.get()
     if current_input:
         rpn_list, result = RPN(lexer(current_input))
-        history_list.insert(tk.END, current_input + "=" + str(result) + "\n")
-        entry.delete(0, tk.END)
-        entry.insert(0, str(result))
+        if str(result).startswith("Error"):
+            entry.delete(0, tk.END)
+            entry.insert(0, result)
+        else:
+            history_list.insert(0, current_input + "=" + str(result) + "\n")
+            entry.delete(0, tk.END)
+            entry.insert(0, str(result))
 
 def toggle_sign():
     current_input = entry.get()

@@ -122,7 +122,7 @@ def perform_function(func, operand):
                 raise ValueError("Tangent of pi/2 is undefined")
             return tan(operand)
     except (ValueError, ZeroDivisionError, ArithmeticError) as e:
-        raise ArithmeticError(f"Error in {func} function: {e}")
+        raise ArithmeticError(f"in {func} function: {e}")
 
 def RPN(tokens):
     RPN = infix_to_postfix(tokens)
