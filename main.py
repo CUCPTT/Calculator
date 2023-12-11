@@ -2,13 +2,15 @@ import tkinter as tk
 from tkinter import ttk
 import pandas as pd
 from lexicalAnalyse import lexer
+from ReversePN import RPN
 
 def calculate():
     current_input = entry.get()
     if current_input:
-        print(lexer(current_input))
-        history_list.insert(tk.END, current_input + "=\n")
+        rpn_list, result = RPN(lexer(current_input))
+        history_list.insert(tk.END, current_input + "=" + str(result) + "\n")
         entry.delete(0, tk.END)
+        entry.insert(0, str(result))
 
 def toggle_sign():
     current_input = entry.get()
@@ -63,7 +65,7 @@ def create_calculator_gui():
             button = ttk.Button(window, text=button_text, command=lambda: entry.delete(0, tk.END), style="Custom.TButton")
         elif button_text == "=":
             # 创建特殊样式的按钮
-            button = ttk.Button(window, text=button_text, command=lambda: [calculate(), entry.delete(0, tk.END)], style="Equal.TButton")
+            button = ttk.Button(window, text=button_text, command=calculate, style="Equal.TButton")
         elif button_text == "+/-":
             # 创建切换正负号按钮
             button = ttk.Button(window, text=button_text, command=toggle_sign, style="Custom.TButton")
