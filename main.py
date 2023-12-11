@@ -12,7 +12,8 @@ def calculate():
             entry.delete(0, tk.END)
             entry.insert(0, result)
         else:
-            history_list.insert(0, current_input + "=" + str(result) + "\n")
+            history_list.insert(0, current_input + "=\n")
+            history_list.insert(1, str(result) + "\n")
             entry.delete(0, tk.END)
             entry.insert(0, str(result))
 
