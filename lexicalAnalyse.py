@@ -86,8 +86,10 @@ def lexer(input_string):
     corrected_tokens = []
     i = 0
     while i < len(tokens):
-        if tokens[i][0] == 'operator' and tokens[i][2] == '-' and i + 1 < len(tokens) and tokens[i + 1][0] == 'number':
-            corrected_tokens.append(('number', tokens[i + 1][1], tokens[i][2] + tokens[i + 1][2]))
+        if tokens[i][0] == 'number' and tokens[i][2][0] == '-' and i + 1 < len(tokens) and tokens[i + 1][0] == 'number':
+            corrected_tokens.append(('number', tokens[i][1], tokens[i][2]))
+            corrected_tokens.append(('operator', 'arithmetic', '-'))
+            corrected_tokens.append(('number', tokens[i + 1][1], tokens[i + 1][2]))
             i += 2
         else:
             corrected_tokens.append(tokens[i])
@@ -97,6 +99,6 @@ def lexer(input_string):
     return corrected_tokens
 
 if __name__ == '__main__':
+    #input_str = '-63.54 - 9'
     input_str = 'sin((1<<2) + -3.3**4)'
     result = lexer(input_str)
-
