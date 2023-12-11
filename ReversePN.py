@@ -59,7 +59,7 @@ def evaluate_postfix(postfix_expr):
                 result = perform_operation2(operand)
                 stack.append(result)
         except (ValueError, ZeroDivisionError, ArithmeticError) as e:
-            return f"Error: {e}"
+            return f"{e}"
 
     return stack[0] if stack else None
 
@@ -124,22 +124,22 @@ def perform_function(func, operand):
     except (ValueError, ZeroDivisionError, ArithmeticError) as e:
         raise ArithmeticError(f"Error in {func} function: {e}")
 
-def RPN(tokens):
-    RPN = infix_to_postfix(tokens)
-    print(f"Postfix Expression: {RPN}")
-    result = evaluate_postfix(RPN)
-    print(f"Result: {result}")
-    return RPN, result
-
-# if __name__ == '__main__':
-#     input_str = '-1+3'
-#     tokens = lexer(input_str)
-
-#     postfix_expr = infix_to_postfix(tokens)
-#     print(f"Postfix Expression: {postfix_expr}")
-
-#     result = evaluate_postfix(postfix_expr)
+# def RPN(tokens):
+#     RPN = infix_to_postfix(tokens)
+#     print(f"Postfix Expression: {RPN}")
+#     result = evaluate_postfix(RPN)
 #     print(f"Result: {result}")
+#     return RPN, result
+
+if __name__ == '__main__':
+    input_str = 'tan(pi/2)'
+    tokens = lexer(input_str)
+
+    postfix_expr = infix_to_postfix(tokens)
+    print(f"Postfix Expression: {postfix_expr}")
+
+    result = evaluate_postfix(postfix_expr)
+    print(f"Result: {result}")
 
 # sin(1<<2 + 3**4)
 # sin(3)**2 + cos(3)**2
