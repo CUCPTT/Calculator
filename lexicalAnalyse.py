@@ -85,12 +85,24 @@ def lexer(input_string):
     # 修正负数的表示
     corrected_tokens = []
     i = 0
+    flag = 0
+    corrected_tokens.append(tokens[0])
     while i < len(tokens):
-        if tokens[i][0] == 'number' and tokens[i][2][0] == '-' and i + 1 < len(tokens) and tokens[i + 1][0] == 'number':
-            corrected_tokens.append(('number', tokens[i][1], tokens[i][2]))
-            corrected_tokens.append(('operator', 'arithmetic', '-'))
-            corrected_tokens.append(('number', tokens[i + 1][1], tokens[i + 1][2]))
-            i += 2
+        if i+1 < len(tokens):
+            if tokens[i][0] == 'number'  and tokens[i + 1][0] == 'number' and tokens[i+1][2][0] == '-'  :
+                corrected_tokens.append(('operator', 'arithmetic', '-'))
+                corrected_tokens.append(('number', tokens[i + 1][1], tokens[i + 1][2].replace('-', '')))
+                flag = 1
+            else:
+                if flag:
+                    flag = 0
+                    
+                elif i>0:
+                    corrected_tokens.append(tokens[i])
+            i += 1
+                    
+        elif flag:
+            break
         else:
             corrected_tokens.append(tokens[i])
             i += 1
@@ -98,7 +110,9 @@ def lexer(input_string):
     print(corrected_tokens)
     return corrected_tokens
 
-if __name__ == '__main__':
-    #input_str = '-63.54 - 9'
-    input_str = 'sin((1<<2) + -3.3**4)'
-    result = lexer(input_str)
+# if __name__ == '__main__':
+#     input_str = '5.04 -6'
+#     # input_str = 'sin((1<<2) + --3.3**-4)'
+#     result = lexer(input_str)
+
+
