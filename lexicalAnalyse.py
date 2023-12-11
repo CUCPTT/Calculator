@@ -25,7 +25,7 @@ def is_illegal_char(char):
 
 def lexer(input_string):
     input_string = input_string.replace(' ', '')
-    input_string = input_string.replace('π', str(pi))
+    input_string = input_string.replace('pi', str(pi))
     input_string = input_string.replace('e', str(e))
     result = split_string(input_string)
 
