@@ -1,3 +1,4 @@
+from cmath import e, pi
 import re
 
 valid_words = [
@@ -24,6 +25,8 @@ def is_illegal_char(char):
 
 def lexer(input_string):
     input_string = input_string.replace(' ', '')
+    input_string = input_string.replace('π', str(pi))
+    input_string = input_string.replace('e', str(e))
     result = split_string(input_string)
 
     illegal_chars = []
