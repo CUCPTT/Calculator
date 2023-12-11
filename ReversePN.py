@@ -124,22 +124,22 @@ def perform_function(func, operand):
     except (ValueError, ZeroDivisionError, ArithmeticError) as e:
         raise ArithmeticError(f"in {func} function: {e}")
 
-# def RPN(tokens):
-#     RPN = infix_to_postfix(tokens)
-#     print(f"Postfix Expression: {RPN}")
-#     result = evaluate_postfix(RPN)
-#     print(f"Result: {result}")
-#     return RPN, result
-
-if __name__ == '__main__':
-    input_str = 'tan(pi/2)'
-    tokens = lexer(input_str)
-
-    postfix_expr = infix_to_postfix(tokens)
-    print(f"Postfix Expression: {postfix_expr}")
-
-    result = evaluate_postfix(postfix_expr)
+def RPN(tokens):
+    RPN = infix_to_postfix(tokens)
+    print(f"Postfix Expression: {RPN}")
+    result = evaluate_postfix(RPN)
     print(f"Result: {result}")
+    return result
+
+# if __name__ == '__main__':
+#     input_str = 'tan(pi/2)'
+#     tokens = lexer(input_str)
+
+#     postfix_expr = infix_to_postfix(tokens)
+#     print(f"Postfix Expression: {postfix_expr}")
+
+#     result = evaluate_postfix(postfix_expr)
+#     print(f"Result: {result}")
 
 # sin(1<<2 + 3**4)
 # sin(3)**2 + cos(3)**2

@@ -35,8 +35,8 @@ def lexer(input_string):
             illegal_chars.append(char)
 
     if illegal_chars:
-        print("Error: Invalid character(s): {}".format(illegal_chars))
-        return False
+        info = ("Error: Invalid character(s): {}".format(illegal_chars))
+        return info
 
     tokens = []
 

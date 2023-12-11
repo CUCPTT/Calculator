@@ -6,8 +6,13 @@ from ReversePN import RPN
 
 def calculate():
     current_input = entry.get()
-    if current_input:
-        rpn_list, result = RPN(lexer(current_input))
+    if not current_input.startswith("Error"):
+        token = lexer(current_input)
+        if str(token).startswith("Error"):
+            entry.delete(0, tk.END)
+            entry.insert(0, token)
+            return
+        result = RPN(token)
         if str(result).startswith("Error"):
             entry.delete(0, tk.END)
             entry.insert(0, result)
@@ -16,6 +21,8 @@ def calculate():
             history_list.insert(1, str(result) + "\n")
             entry.delete(0, tk.END)
             entry.insert(0, str(result))
+    else:
+        entry.delete(0, tk.END)
 
 def toggle_sign():
     current_input = entry.get()
