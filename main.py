@@ -2,13 +2,19 @@ import tkinter as tk
 from tkinter import ttk
 import pandas as pd
 from lexicalAnalyse import lexer
+from ReversePN import RPN
 
 def calculate():
     current_input = entry.get()
     if current_input:
-        print(lexer(current_input))
-        history_text.insert(1.0, current_input + "=\n")
-        entry.delete(0, tk.END)
+        rpn_list, result = RPN(lexer(current_input))
+        if str(result).startswith("Error"):
+            entry.delete(0, tk.END)
+            entry.insert(0, result)
+        else:
+            history_list.insert(0, current_input + "=" + str(result) + "\n")
+            entry.delete(0, tk.END)
+            entry.insert(0, str(result))
 
 def toggle_sign():
     current_input = entry.get()
@@ -21,15 +27,15 @@ def toggle_sign():
 def create_calculator_gui():
     global entry 
     window = tk.Tk()
-    window.title("https://github.com/CUCPTT/Calculator")
+    window.title("github.com/CUCPTT/Calculator")
     window.resizable(False, False)
 
     # 设置窗口图标
     window.iconbitmap("misc/favicon.ico")
 
-    global history_text
-    history_text = tk.Text(window, width=30, height=5, font=("Arial", 16), bg="white", relief="flat")
-    history_text.grid(row=0, column=0, columnspan=6)
+    global history_list
+    history_list = tk.Listbox(window, width=30, height=5, font=("Arial", 16), bg="white", relief="flat")
+    history_list.grid(row=0, column=0, columnspan=6)
 
     entry = tk.Entry(window, width=30, font=("Arial", 16), relief="flat")
     entry.grid(row=1, column=0, columnspan=6)
@@ -63,7 +69,7 @@ def create_calculator_gui():
             button = ttk.Button(window, text=button_text, command=lambda: entry.delete(0, tk.END), style="Custom.TButton")
         elif button_text == "=":
             # 创建特殊样式的按钮
-            button = ttk.Button(window, text=button_text, command=lambda: [calculate(), entry.delete(0, tk.END)], style="Equal.TButton")
+            button = ttk.Button(window, text=button_text, command=calculate, style="Equal.TButton")
         elif button_text == "+/-":
             # 创建切换正负号按钮
             button = ttk.Button(window, text=button_text, command=toggle_sign, style="Custom.TButton")
