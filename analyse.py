@@ -85,6 +85,7 @@ def analyse(token):
     cnt = 0
     stack = [('#','#','#')]
     token.append(('#','#','#'))
+    flag = -1
     while token != []:
         # print(stack)
         cnt = cnt + 1
@@ -166,6 +167,7 @@ def analyse(token):
                         break
             else:
                 table.insert("", tk.END, text=str(cnt), values=('', '', '', '', '','拒绝'))
+                flag = 1
                 break
         elif priority_map[x][y] == '=':
             if len(stack) == 2 and stack[1][0] == '' and len(token) == 1 and token[0][0] == '#':
@@ -200,6 +202,7 @@ def analyse(token):
             stack.append(('','','E'))                        
         else:
             table.insert("", tk.END, text=str(cnt), values=('', '', '', '', '','拒绝'))
+            flag = 2
             break
         
 
@@ -212,9 +215,9 @@ def analyse(token):
     if flag == -1:
         return True
     elif flag == 1:
-        return "Error:归约失败"
+        return "Error:Reduction failed"
     else:
-        return "Error:算式不符合语法规则"
+        return "Error:The formula does not follow grammar rules"
     
 # analyse([('left','function','sin('), ('left','','('),
 #     ('number','integer','1'), ('operator','logical','<<'),
