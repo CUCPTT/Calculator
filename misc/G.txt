@@ -1,13 +1,9 @@
-E -> T|E|T
-T -> F|T^F
-F -> G|F&G
-G -> H|G>>H|G<<H
-H -> I|H+I|H-I
-I -> J|I*J|I/J|I%J|I//J
-J -> K|J~K
-K -> L|K**L
-L -> M|Lsin(M|Lcos(M|Ltan(M|Lsqrt(M|Lln(M
-M -> N|(E)
-E -> num
-
-
+E -> T
+T -> M|T(/)M
+M-> K | M^K
+K -> F | K&F
+F-> G | F>>G | F<< G
+G-> H | G-H| G+H
+H -> I| H*I | H/J | H%J
+I -> J | ~J
+J-> num | (E) | sin(E)|cos(E)| tan(E)|In(E)|sqrt(E)
