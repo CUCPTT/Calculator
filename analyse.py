@@ -209,10 +209,16 @@ def analyse(token):
     
     # 运行主循环
     root.mainloop()
-
-analyse([('left','function','sin('), ('left','','('),
-    ('number','integer','1'), ('operator','logical','<<'),
-    ('number','integer','2'), ('right','',')'),
-    ('operator','arithmetic','+'), ('number','integer','3'),
-    ('operator','arithmetic','*'), ('number','integer','4'),
-    ('right','',')')])
+    if flag == -1:
+        return True
+    elif flag == 1:
+        return "Error:归约失败"
+    else:
+        return "Error:算式不符合语法规则"
+    
+# analyse([('left','function','sin('), ('left','','('),
+#     ('number','integer','1'), ('operator','logical','<<'),
+#     ('number','integer','2'), ('right','',')'),
+#     ('operator','arithmetic','+'), ('number','integer','3'),
+#     ('operator','arithmetic','*'), ('number','integer','4'),
+#     ('right','',')')])
