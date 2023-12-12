@@ -3,28 +3,9 @@ from tkinter import ttk
 import pandas as pd
 from lexicalAnalyse import lexer
 from ReversePN import RPN
+from analysis import analyse
 
-def calculate():
-    current_input = entry.get()
-    if not current_input.startswith("Error"):
-        token = lexer(current_input)
-        if str(token).startswith("Error"):
-            entry.delete(0, tk.END)
-            entry.insert(0, token)
-            return
-        result = RPN(token)
-        if str(result).startswith("Error"):
-            entry.delete(0, tk.END)
-            entry.insert(0, result)
-        else:
-            history_list.insert(0, current_input + "=\n")
-            history_list.insert(1, str(result) + "\n")
-            entry.delete(0, tk.END)
-            entry.insert(0, str(result))
-    else:
-        entry.delete(0, tk.END)
-
-def toggle_sign():
+def toggle_sign(entry):
     current_input = entry.get()
     if current_input:
         if current_input[0] == "-":
@@ -33,19 +14,17 @@ def toggle_sign():
             entry.insert(0, "-")
 
 def create_calculator_gui():
-    global entry 
-    window = tk.Tk()
-    window.title("github.com/CUCPTT/Calculator")
-    window.resizable(False, False)
+    root = tk.Tk()
+    root.title("github.com/CUCPTT/Calculator")
+    root.resizable(False, False)
 
     # 设置窗口图标
-    window.iconbitmap("misc/favicon.ico")
+    root.iconbitmap("misc/favicon.ico")
 
-    global history_list
-    history_list = tk.Listbox(window, width=30, height=5, font=("Arial", 16), bg="white", relief="flat")
+    history_list = tk.Listbox(root, width=30, height=5, font=("Arial", 16), bg="white", relief="flat")
     history_list.grid(row=0, column=0, columnspan=6)
 
-    entry = tk.Entry(window, width=30, font=("Arial", 16), relief="flat")
+    entry = tk.Entry(root, width=30, font=("Arial", 16), relief="flat")
     entry.grid(row=1, column=0, columnspan=6)
 
     # 加载CSV文件
@@ -53,7 +32,7 @@ def create_calculator_gui():
     button_texts = data.values.flatten()
 
     # 设置按钮样式
-    style = ttk.Style(window)
+    style = ttk.Style(root)
     style.theme_create("custom_theme", parent="alt", settings={
         "Custom.TButton": {
             "configure": {"background": "white", "width": 4, "font": ("Arial", 16),
@@ -71,19 +50,16 @@ def create_calculator_gui():
     for i, button_text in enumerate(button_texts):
         if button_text == "CE":
             # 创建删除按钮
-            button = ttk.Button(window, text=button_text, command=lambda: entry.delete(len(entry.get())-1), style="Custom.TButton")
+            button = ttk.Button(root, text=button_text, command=lambda: entry.delete(len(entry.get())-1), style="Custom.TButton")
         elif button_text == "C":
             # 创建清空按钮
-            button = ttk.Button(window, text=button_text, command=lambda: entry.delete(0, tk.END), style="Custom.TButton")
+            button = ttk.Button(root, text=button_text, command=lambda: entry.delete(0, tk.END), style="Custom.TButton")
         elif button_text == "=":
-            # 创建特殊样式的按钮
-            button = ttk.Button(window, text=button_text, command=calculate, style="Equal.TButton")
+            button = ttk.Button(root, text=button_text, command=lambda: calculate(entry, history_list), style="Equal.TButton")
         elif button_text == "+/-":
-            # 创建切换正负号按钮
-            button = ttk.Button(window, text=button_text, command=toggle_sign, style="Custom.TButton")
+            button = ttk.Button(root, text=button_text, command=lambda: toggle_sign(entry), style="Custom.TButton")
         else:
-            # 创建普通按钮
-            button = ttk.Button(window, text=button_text, command=lambda txt=button_text: entry.insert(tk.END, txt), style="Custom.TButton")
+            button = ttk.Button(root, text=button_text, command=lambda txt=button_text: entry.insert(tk.END, txt), style="Custom.TButton")
         
         button.grid(row=row_count, column=(i % 5))
 
@@ -91,7 +67,33 @@ def create_calculator_gui():
         if (i + 1) % 5 == 0:
             row_count += 1
 
-    window.mainloop()
+    root.mainloop()
+
+def calculate(entry, history_list):
+    current_input = entry.get()
+    if not current_input.startswith("Error"):
+        token = lexer(current_input)
+        if str(token).startswith("Error"):
+            entry.delete(0, tk.END)
+            entry.insert(0, token)
+            return
+        tokens = token.copy()
+        g_correct = analyse(tokens)
+        if str(g_correct).startswith("Error"):
+            entry.delete(0, tk.END)
+            entry.insert(0, g_correct)
+            return
+        result = RPN(token)
+        if str(result).startswith("Error"):
+            entry.delete(0, tk.END)
+            entry.insert(0, result)
+        else:
+            history_list.insert(0, current_input + "=\n")
+            history_list.insert(1, str(result) + "\n")
+            entry.delete(0, tk.END)
+            entry.insert(0, str(result))
+    else:
+        entry.delete(0, tk.END)
 
 if __name__ == "__main__":
     create_calculator_gui()
