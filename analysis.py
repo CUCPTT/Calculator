@@ -35,7 +35,7 @@ def analyse(token):
     ['<', '<', '<', '<', '<', '=', '<', '<', '<', '<', '<', '<', '<', '<', '<', '<', '<', '<','<', '0'],# sqrt(
     ['<', '<', '<', '<', '<', '=', '<', '<', '<', '<', '<', '<', '<', '<', '<', '<', '<', '<','<', '0'],# tan(
     ['>', '>', '>', '>', '0', '>', '>', '>', '>', '>', '<', '>', '>', '0', '0', '0', '0', '0', '0', '>'],# num
-    ['<', '<', '<', '<', '<', '0', '<', '<', '<', '<', '0', '<', '<', '<', '<', '<', '<', '<', '<', '=']# # 
+    ['<', '<', '<', '<', '<', '0', '<', '<', '<', '<', '<', '<', '<', '<', '<', '<', '<', '<', '<', '=']# # 
     ]
     word_map = {'+':0, '-':1, '*':2, '/':3, '(':4, ')':5, '%':6, '^':7, '&':8, '|':9, '~':10, '<<':11, '>>':12, 'sin(':13, 'cos(':14, 'ln(':15, 'sqrt(':16, 'tan(':17, 'num':18, '#':19}
     grammar = [('E','T', ''), ('T','M', ''), ('T','T|M', '|'), ('M','K', ''), ('M','M^K', '^'), ('K','F', ''), ('K','K&F', '&'), ('F','G', ''), ('F','F>>G', '>>'), ('T','F<<G', '<<'), ('G','H', ''), ('G','G-H', '-'), ('G','G+H', '+'), ('H','I', ''), ('H','H*I', '*'), ('H','H/J', '/'), ('H','H%J', '%')
@@ -53,15 +53,15 @@ def analyse(token):
     table_text = []
     flag = -1
     while token != []:
-        # print(stack)
-        # print(token)
+        print(stack)
+        print(token)
         cnt = cnt + 1
         a = token[0]
         x = -1
         for i in range(len(stack)-1,-1,-1):
             if stack[i][0] != '':
                 # print(cnt)
-                # print(stack[i][2])
+                print(stack[i][2])
                 x = word_map[stack[i][2]]
                 break
         
@@ -69,7 +69,9 @@ def analyse(token):
             y = word_map['num']
         else:
             y = word_map[a[2]]
-        
+        # print(x)
+        # print(y)
+        print(priority_map[x][y])
         if priority_map[x][y] == '<':
             stack_string = ''
             string = ''
@@ -106,7 +108,7 @@ def analyse(token):
                 else:
                     break
             
-            #print('reduce',reduce_string)
+            print('reduce',reduce_string)
             after_reduce_string = ''
             for i in grammar:
                 if i[1] == reduce_string:
@@ -119,15 +121,16 @@ def analyse(token):
                     if i[2] == reduce_string[1:len(reduce_string)-1] or i[2] == reduce_string[:len(reduce_string)-2]:
                         after_reduce_string = i[0]
                         break
-            #print("after ",after_reduce_string)
+            # print("after ",after_reduce_string)
             nowy = y
             if after_reduce_string != '':
+                need_reduce_string = ''
                 for i in range(len(stack)-1,-1,-1):
-                    if stack[i][0] =='': 
-                        stack.remove(stack[i])
-                    elif priority_map[word_map[stack[i][2]]][nowy] == '>':
-                        nowy = word_map[stack[i][2]] 
-                        stack.remove(stack[i])
+                    if need_reduce_string != reduce_string:
+                        need_reduce_string = stack[i][2] + need_reduce_string
+                        
+                        print(need_reduce_string)
+                        stack.pop(i)
                     else:
                         stack.append(('','',after_reduce_string))
                         #print(stack)
@@ -163,9 +166,9 @@ def analyse(token):
                 if i[2] != a[2]:
                     string += i[2]
             table_text.append((str(cnt), stack_string, '>', a[2], string,'归约'))
-            stack.remove(stack[len(stack)-1])
-            stack.remove(stack[len(stack)-1])
-            stack.remove(stack[len(stack)-1])
+            stack.pop(len(stack)-1)
+            stack.pop(len(stack)-1)
+            stack.pop(len(stack)-1)
             stack.append(('','','E'))                        
         else:
             table_text.append(('', '', '', '', '','拒绝'))
@@ -178,11 +181,14 @@ def analyse(token):
     elif flag == 2:
         info = "Error:The formula does not follow grammar rules"
 
+    print(info)
     return table_text, all_string, info
         
 
 
-def show(table_text, string):
+def show(a):
+    table_text = a[0] 
+    string = a[1]
     root = tk.Tk()
     root.title("对输入串 "+string+" 的算符优先归约过程")
     root.iconbitmap('misc/favicon.ico')
@@ -226,5 +232,4 @@ def show(table_text, string):
     # 运行主循环
     root.mainloop()
     
-# show(analyse([('number','integer','3'),
-#     ('operator','arithmetic','*'), ('number','integer','3'),]))
+# show(analyse([('operator','arithmetic','~'), ('number','integer','8')]))
