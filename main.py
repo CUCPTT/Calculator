@@ -83,6 +83,7 @@ def calculate(entry, history_list):
         if str(info).startswith("Error"):
             entry.delete(0, tk.END)
             entry.insert(0, info)
+            show(table_text, string)
             return
         result = RPN(token)
         if str(result).startswith("Error"):
