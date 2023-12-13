@@ -186,9 +186,7 @@ def analyse(token):
         
 
 
-def show(a):
-    table_text = a[0] 
-    string = a[1]
+def show(table_text, string):
     root = tk.Tk()
     root.title("对输入串 "+string+" 的算符优先归约过程")
     root.iconbitmap('misc/favicon.ico')
