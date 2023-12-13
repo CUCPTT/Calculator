@@ -1,9 +1,0 @@
-E -> T
-T -> M|T(/)M
-M-> K | M^K
-K -> F | K&F
-F-> G | F>>G | F<< G
-G-> H | G-H| G+H
-H -> I| H*I | H/J | H%J
-I -> J | ~J
-J-> num | (E) | sin(E)|cos(E)| tan(E)|In(E)|sqrt(E)
