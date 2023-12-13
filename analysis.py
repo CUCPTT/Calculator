@@ -172,19 +172,20 @@ def analyse(token):
             flag = 2
             break
 
-    return table_text,all_string,flag
+    info = ''
+    if flag == 1:
+        info = "Error:Reduction failed"
+    elif flag == 2:
+        info = "Error:The formula does not follow grammar rules"
+
+    return table_text, all_string, info
         
 
 
-def show(token):
-    table_text = token[0]
-    string = token[1]
-    flag = token[2]
+def show(table_text, string):
     root = tk.Tk()
     root.title("对输入串 "+string+" 的算符优先归约过程")
     root.iconbitmap('misc/favicon.ico')
-    
-
 
     # 创建标题标签
     title_label = tk.Label(root, text="对输入串 "+string+" 的算符优先归约过程", font=("Arial", 12))
@@ -224,12 +225,6 @@ def show(token):
     
     # 运行主循环
     root.mainloop()
-    if flag == -1:
-        return True
-    elif flag == 1:
-        return "Error:Reduction failed"
-    else:
-        return "Error:The formula does not follow grammar rules"
     
 # show(analyse([('number','integer','3'),
 #     ('operator','arithmetic','*'), ('number','integer','3'),]))
