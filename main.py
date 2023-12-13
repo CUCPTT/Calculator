@@ -72,6 +72,8 @@ from analysis import analyse, show
 
 def calculate(entry, history_list):
     current_input = entry.get()
+    if not current_input :
+        return
     if not current_input.startswith("Error"):
         token = lexer(current_input)
         if str(token).startswith("Error"):
