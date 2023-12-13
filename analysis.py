@@ -1,7 +1,6 @@
 import re
 import tkinter as tk
 from tkinter import ttk
-
 # 分析过程
 def analyse(token):
 # E -> T
@@ -45,48 +44,16 @@ def analyse(token):
     for i in token:
         string += i[2]
 
-    root = tk.Tk()
-    root.title("对输入串 "+ string +" 的算符优先归约过程")
-    root.iconbitmap('misc/favicon.ico')
 
-    # 创建标题标签
-    title_label = tk.Label(root, text="对输入串 "+string+" 的算符优先归约过程")
-    title_label.pack(pady=10)
-
-    # 使用子窗口的独立样式创建表格
-    table = ttk.Treeview(root, height=20)
-    table["columns"] = ("Steps", "Stack", "PriorityRelationship", "CurrentSymbol", "RemainingInputString","ShiftOrReduce")
-
-    # 显示表格并设置垂直滚动条
-    vsb = ttk.Scrollbar(root, orient="vertical", command=table.yview)
-    table.configure(yscrollcommand=vsb.set)
-    vsb.pack(side="right", fill="y")
-    table.pack(expand=True, fill="both") 
-    table.place(width=500, height=800)
-    # 设置列宽
-    table.column("#0", width=0, stretch=tk.NO)
-    table.column("Steps", width=100)
-    table.column("Stack", width=150)
-    table.column("PriorityRelationship", width=100)
-    table.column("CurrentSymbol", width=100)
-    table.column("RemainingInputString", width=150)
-    table.column("ShiftOrReduce", width=100)
-    
-    # 设置列标题
-    table.heading("#0", text="", anchor=tk.W)
-    table.heading("Steps", text="步骤")
-    table.heading("Stack", text="栈")
-    table.heading("PriorityRelationship", text="优先关系")
-    table.heading("CurrentSymbol", text="当前符号")
-    table.heading("RemainingInputString", text="剩余输入串")
-    table.heading("ShiftOrReduce", text="移进或归约")
 
     cnt = 0
     stack = [('#','#','#')]
     token.append(('#','#','#'))
+    table_text = []
     flag = -1
     while token != []:
         # print(stack)
+        # print(token)
         cnt = cnt + 1
         a = token[0]
         x = -1
@@ -110,7 +77,7 @@ def analyse(token):
             for i in token:
                 if i[2] != a[2]:
                     string += i[2]
-            table.insert("", tk.END, text=str(cnt), values=(str(cnt), stack_string, '<', a[2], string,'移进'))
+            table_text.append((str(cnt), stack_string, '<', a[2], string,'移进'))
             if a[0] == 'number':
                 stack.append((a[0],a[1],'num'))    
             else:
@@ -125,7 +92,7 @@ def analyse(token):
             for i in token:
                 if i[2] != a[2]:
                     string += i[2]
-            table.insert("", tk.END, text=str(cnt), values=(str(cnt), stack_string, '>', a[2], string,'归约'))
+            table_text.append((str(cnt), stack_string, '>', a[2], string,'归约'))
             
             nowy = y
             reduce_string = ''
@@ -165,12 +132,12 @@ def analyse(token):
                         #print(stack)
                         break
             else:
-                table.insert("", tk.END, text=str(cnt), values=('', '', '', '', '','拒绝'))
+                table_text.append(('', '', '', '', '','拒绝'))
                 flag = 1
                 break
         elif priority_map[x][y] == '=':
             if len(stack) == 2 and stack[1][0] == '' and len(token) == 1 and token[0][0] == '#':
-                table.insert("", tk.END, text=str(cnt), values=(str(cnt), '#'+stack[1][2], '<', '#', '','接受'))
+                table_text.append((str(cnt), '#'+stack[1][2], '<', '#', '','接受'))
                 break
             stack_string = ''
             string = ''
@@ -179,7 +146,7 @@ def analyse(token):
             for i in token:
                 if i[2] != a[2]:
                     string += i[2]
-            table.insert("", tk.END, text=str(cnt), values=(str(cnt), stack_string, '<', a[2], string,'移进'))
+            table_text.append((str(cnt), stack_string, '<', a[2], string,'移进'))
             if a[0] == 'number':
                 stack.append((a[0],a[1],'num'))    
             else:
@@ -194,16 +161,68 @@ def analyse(token):
             for i in token:
                 if i[2] != a[2]:
                     string += i[2]
-            table.insert("", tk.END, text=str(cnt), values=(str(cnt), stack_string, '>', a[2], string,'归约'))
+            table_text.append((str(cnt), stack_string, '>', a[2], string,'归约'))
             stack.remove(stack[len(stack)-1])
             stack.remove(stack[len(stack)-1])
             stack.remove(stack[len(stack)-1])
             stack.append(('','','E'))                        
         else:
-            table.insert("", tk.END, text=str(cnt), values=('', '', '', '', '','拒绝'))
+            table_text.append(('', '', '', '', '','拒绝'))
             flag = 2
             break
 
+    return table_text,string,flag
+        
+
+
+def show(token):
+    table_text = token[0]
+    string = token[1]
+    flag = token[2]
+    root = tk.Tk()
+    root.title("对输入串 "+string+" 的算符优先归约过程")
+    root.iconbitmap('misc/favicon.ico')
+    
+
+
+    # 创建标题标签
+    title_label = tk.Label(root, text="对输入串 "+string+" 的算符优先归约过程", font=("Arial", 12))
+    title_label.pack(pady=10)
+    
+    # 创建表格
+    table = ttk.Treeview(root,height=20)
+    table["columns"] = ("Steps", "Stack", "PriorityRelationship", "CurrentSymbol", "RemainingInputString","ShiftOrReduce")
+    # 显示表格并设置垂直滚动条
+    vsb = ttk.Scrollbar(root, orient="vertical", command=table.yview)
+    table.configure(yscrollcommand=vsb.set)
+    vsb.pack(side="right", fill="y")
+    table.pack(expand=True, fill="both", pady=200) # 设置表格的初始高度
+    # 设置表格的位置和大小
+    table.place( width=500, height=800)
+    # 设置列宽
+    table.column("#0", width=0, stretch=tk.NO)
+    table.column("Steps", width=100)
+    table.column("Stack", width=150)
+    table.column("PriorityRelationship", width=100)
+    table.column("CurrentSymbol", width=100)
+    table.column("RemainingInputString", width=150)
+    table.column("ShiftOrReduce", width=100)
+    
+    # 设置列标题
+    table.heading("#0", text="", anchor=tk.W)
+    table.heading("Steps", text="步骤")
+    table.heading("Stack", text="栈")
+    table.heading("PriorityRelationship", text="优先关系")
+    table.heading("CurrentSymbol", text="当前符号")
+    table.heading("RemainingInputString", text="剩余输入串")
+    table.heading("ShiftOrReduce", text="移进或归约")
+    for i in table_text:
+        table.insert("", tk.END, text=i[0], values=(i[0],i[1],i[2],i[3],i[4],i[5]))
+        # 显示表格
+    table.pack()
+    
+    # 运行主循环
+    root.mainloop()
     if flag == -1:
         return True
     elif flag == 1:
@@ -211,9 +230,9 @@ def analyse(token):
     else:
         return "Error:The formula does not follow grammar rules"
     
-# analyse([('left','function','sin('), ('left','','('),
+# show(analyse([('left','function','sin('), ('left','','('),
 #     ('number','integer','1'), ('operator','logical','<<'),
 #     ('number','integer','2'), ('right','',')'),
 #     ('operator','arithmetic','+'), ('number','integer','3'),
 #     ('operator','arithmetic','*'), ('number','integer','4'),
-#     ('right','',')')])
+#     ('right','',')')]))
