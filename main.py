@@ -2,8 +2,6 @@ import tkinter as tk
 from tkinter import ttk
 import pandas as pd
 from lexicalAnalyse import lexer
-from ReversePN import RPN
-from analysis import analyse
 
 def toggle_sign(entry):
     current_input = entry.get()
@@ -69,6 +67,9 @@ def create_calculator_gui():
 
     root.mainloop()
 
+from ReversePN import RPN
+from analysis import analyse, show
+
 def calculate(entry, history_list):
     current_input = entry.get()
     if not current_input.startswith("Error"):
@@ -78,10 +79,10 @@ def calculate(entry, history_list):
             entry.insert(0, token)
             return
         tokens = token.copy()
-        g_correct = analyse(tokens)
-        if str(g_correct).startswith("Error"):
+        table_text, string, info = analyse(tokens)
+        if str(info).startswith("Error"):
             entry.delete(0, tk.END)
-            entry.insert(0, g_correct)
+            entry.insert(0, info)
             return
         result = RPN(token)
         if str(result).startswith("Error"):
@@ -92,6 +93,7 @@ def calculate(entry, history_list):
             history_list.insert(1, str(result) + "\n")
             entry.delete(0, tk.END)
             entry.insert(0, str(result))
+            show(table_text, string)
     else:
         entry.delete(0, tk.END)
 
